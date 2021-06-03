@@ -36,5 +36,5 @@ G1 Y30 F8000; Shake
 G0 F5000 Z15.0 ; Move up to avoid blade movement, exact height debatable
 G4 S60; Don't do anything for 60 seconds, debug line
 
-M23 print.gcode; Set current print back up for printing
+M23 reprint_test.gcode; Set current print back up for printing
 M24; Restart print
