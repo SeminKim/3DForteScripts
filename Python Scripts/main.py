@@ -1,10 +1,14 @@
 import os
+import shutil
 import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+from get_score import get_score
+
 
 # base_dir =os.getcwd()
-base_dir = 'Directory Here'
+base_dir = '/home/pi/.octoprint/data/octolapse/tmp/octolapse_snapshots_tmp/'
+backup_dir = '/home/pi/octoprint/Images/'
 
 
 class Target:
@@ -22,7 +26,7 @@ class Target:
         self.observer.start()
         try:
             while True:
-                time.sleep(1)
+                time.sleep(0.5)
         except:
             self.observer.stop()
             print("Error")
@@ -38,8 +42,18 @@ class Handler(FileSystemEventHandler):
         return
 
     def on_created(self, event):  # 파일, 디렉터리가 생성되면 실행
-        guid = event.src_path.replace(base_dir, "")[1:]
-        print(guid)
+
+        path = event.src_path
+        if path[-4:] != ".jpg":
+            return
+        #print(event)
+        newpath = path.replace(base_dir, backup_dir)
+        newdir_idx = newpath.rfind('/')
+        newdir = newpath[:newdir_idx]
+        os.makedirs(newdir,exist_ok=True)
+        shutil.copy2(path, newpath)
+        get_score(newpath)
+        
 
     def on_deleted(self, event):  # 파일, 디렉터리가 삭제되면 실행
         return
