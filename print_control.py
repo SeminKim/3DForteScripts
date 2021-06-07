@@ -53,6 +53,6 @@ def print_control(curr, score, deviance, scr_diff, dev_diff):
     elif SCR_DIFF > BR_SCR_THRES and DEV_DIFF > BR_DEV_THRES:
         print("Cause: Potential (partial) breakage", f'LAYER:{LAYER}')
         pause_print()
-    elif SCORE < FIL_SCR_THRES and DEVIANCE < FIL_DEV_THRES:
+'''    elif SCORE < FIL_SCR_THRES and DEVIANCE < FIL_DEV_THRES:
         print("Cause: Filament ran out or nozzle/extruder clog", f'LAYER:{LAYER}')
-        pause_print()
+        pause_print()'''

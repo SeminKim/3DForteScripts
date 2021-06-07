@@ -1,14 +1,20 @@
+import os
+import random
+
 import cv2
 from os.path import dirname
 from sys import argv, exit, stderr
 from skimage.metrics import normalized_root_mse as compare_nrmse
 from print_control import *
 
+import time
+import random
 
 def get_score(path):
     # for debugging
     if type(path) == int:
-        basepath = 'JUST_DIR'
+        basepath = 'C:/Users/Kim Semin/Desktop/Projects/3DForte/captures/'
+        # basepath = 'C:/Users/Kim Semin/Desktop/Projects/3DForte/images/CE3PRO_Test1_-_cylinder'
         path = basepath + str(path).rjust(6, '0') + '.jpg'
 
     fst_file = path
@@ -16,8 +22,8 @@ def get_score(path):
     curr = int(fst_file[-10:-4])
     prev = curr - 1
 
-    def pause_print():
-        pass
+    # def pause_print():
+    #     pass
 
     # For the 1st and 2nd images, output 0
     # 1st image is used as background image
@@ -47,7 +53,7 @@ def get_score(path):
     grayBG = cv2.imread(bg_file, 0)
 
     # Remove background and threshold to remove shadow effects
-    threshold = 1
+    threshold = 20
 
     diffA = cv2.absdiff(grayA, grayBG)
     thresA = cv2.threshold(diffA, threshold, 255, cv2.THRESH_BINARY)[1]
@@ -86,9 +92,9 @@ def get_score(path):
     with open(logfile, 'a') as log:
         log.write(f'{curr} {score} {deviance} {scr_diff} {dev_diff}\n')
 
-    print("{} {} {} {} {}".format(curr, score, deviance, scr_diff, dev_diff))
-    print("Image: {:d}\t Score: {}\t Deviance: {}\tDiffs: {}/{}".format(curr, score, deviance, scr_diff, dev_diff),
-          file=stderr)
+    #print("{} {} {} {} {}".format(curr, score, deviance, scr_diff, dev_diff))
+    print("Image: {:d}\t Score: {}\t Deviance: {}\tDiffs: {}/{}".format(round(curr,3), round(score,3), round(deviance,3),
+                                                                        round(scr_diff,3), round(dev_diff,3)),file=stderr)
     print_control(curr, score, deviance, scr_diff, dev_diff)
 
     '''
@@ -122,5 +128,15 @@ def get_score(path):
         pause_print()
     '''
 
-# for i in range(50):
-#    get_score(i)
+from glob import glob
+
+'''for idx, file in enumerate(glob('captures2/*')):
+    os.rename(file, str(idx).rjust(6,'0') + '.jpg')'''
+
+#for i in range(50):
+    # get_score(i)
+    #time.sleep(random.randint(1,10)/10.0)
+
+for path in glob('captures2/*'):
+    get_score(path)
+    time.sleep(0.26)
