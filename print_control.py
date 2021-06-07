@@ -5,17 +5,15 @@ API_KEY = 'API_KEY'
 
 
 # Pause the printer
-def pause_print():
+def cancel_print():
     try:
         client = OctoClient(url=URL, apikey=API_KEY)
         flags = client.printer()['state']['flags']
         if flags['printing']:
-            client.pause()
-            print("Print paused.")
-        elif flags['paused'] or flags['pausing']:
-            print("Print already paused.")
+            client.cancel()
+            print("Print cancelled.")
         else:
-            print("Print cancelled or error occurred.")
+            print("Print already cancelled or an error occurred.")
     except Exception as e:
         print(e)
 
@@ -48,11 +46,11 @@ def print_control(curr, score, deviance, scr_diff, dev_diff):
     # This indicates the model has detached from the bed
     if SCORE > SCR_THRES and DEVIANCE > DEV_THRES:
         print("Cause: Print detached from bed", f'LAYER:{LAYER}')
-        pause_print()
+        cancel_print()
     # This indicates a part of the model has broken off
     elif SCR_DIFF > BR_SCR_THRES and DEV_DIFF > BR_DEV_THRES:
         print("Cause: Potential (partial) breakage", f'LAYER:{LAYER}')
-        pause_print()
+        cancel_print()
     elif SCORE < FIL_SCR_THRES and DEVIANCE < FIL_DEV_THRES:
         print("Cause: Filament ran out or nozzle/extruder clog", f'LAYER:{LAYER}')
-        pause_print()
+        cancel_print()

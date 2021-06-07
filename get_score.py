@@ -16,9 +16,6 @@ def get_score(path):
     curr = int(fst_file[-10:-4])
     prev = curr - 1
 
-    def pause_print():
-        pass
-
     # For the 1st and 2nd images, output 0
     # 1st image is used as background image
     # 2nd image has no previous image (gives errors as prev is BG)
@@ -47,7 +44,7 @@ def get_score(path):
     grayBG = cv2.imread(bg_file, 0)
 
     # Remove background and threshold to remove shadow effects
-    threshold = 1
+    threshold = 20
 
     diffA = cv2.absdiff(grayA, grayBG)
     thresA = cv2.threshold(diffA, threshold, 255, cv2.THRESH_BINARY)[1]
